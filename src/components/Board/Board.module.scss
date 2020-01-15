@@ -1,0 +1,16 @@
+@import "../../scss/variables.scss";
+
+.board {
+  border: 1px solid red;
+}
+
+.listArea {
+  border: 1px solid blue;
+}
+
+.newList {
+  border: 1px solid black;
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+}

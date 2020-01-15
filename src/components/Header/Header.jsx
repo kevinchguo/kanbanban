@@ -7,7 +7,7 @@ class Header extends Component {
   render() {
     return (
       <>
-        <div className={styles.header}>This is header</div>
+        <div className={styles.header}>Toodoo App</div>
       </>
     );
   }
