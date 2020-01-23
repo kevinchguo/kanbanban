@@ -1,6 +1,9 @@
 @import "../../scss/variables";
 
 .task {
-  padding-left: 10px;
-  border: 1px solid orange;
+  padding: 10px;
+  border: none;
+  border-radius: $border-radius;
+  margin: 5px;
+  box-shadow: $box-shadow;
 }
