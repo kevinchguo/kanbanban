@@ -10,6 +10,10 @@ class Card extends bookshelf.Model {
     return true;
   }
 
+  list() {
+    return this.belongsTo("List");
+  }
+
   list_id() {
     return this.hasOne("List", "id", "list_id");
   }

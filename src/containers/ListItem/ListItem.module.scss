@@ -3,10 +3,12 @@
 .listItem {
   display: flex;
   flex-direction: column;
-  border: 1px solid yellow;
   height: fit-content;
   width: inherit;
   padding: 15px;
+  margin: $margin;
+  border-radius: $border-radius;
+  background-color: $grey-accent;
 }
 
 .listName {

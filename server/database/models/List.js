@@ -11,6 +11,10 @@ class List extends bookshelf.Model {
     return true;
   }
 
+  board() {
+    return this.belongsTo("Board");
+  }
+
   board_id() {
     return this.hasOne("Board", "id", "board_id");
   }

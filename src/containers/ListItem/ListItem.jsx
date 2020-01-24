@@ -14,7 +14,9 @@ const ListItem = props => {
         {props.listName}
       </textarea>
       {props.tasks.map(tasks => {
-        return <Task taskName={tasks.taskName} createdAt={tasks.createdAt} />;
+        return (
+          <Task taskName={tasks.description} createdAt={tasks.created_at} />
+        );
       })}
     </div>
   );

@@ -1,18 +1,14 @@
-const Edu = require('./models/Edu');
-const Interest = require('./models/Interest');
-const Project = require('./models/Project');
-const Skill = require('./models/Skill');
-const User = require('./models/User');
-const Work = require('./models/Work');
+const User = require("./models/User");
+const Board = require("./models/Board");
+const List = require("./models/List");
+const Card = require("./models/Card");
 
 module.exports = function(req, res, next) {
   req.db = {
-    Edu: Edu,
-    Interest: Interest,
-    Project: Project,
-    Skill: Skill,
     User: User,
-    Work: Work
+    Board: Board,
+    List: List,
+    Card: Card
   };
   next();
 };
