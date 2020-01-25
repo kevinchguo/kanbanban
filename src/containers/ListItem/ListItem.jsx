@@ -15,7 +15,11 @@ const ListItem = props => {
       </textarea>
       {props.tasks.map(tasks => {
         return (
-          <Task taskName={tasks.description} createdAt={tasks.created_at} />
+          <Task
+            taskName={tasks.description}
+            createdAt={tasks.created_at}
+            cards={props.tasks}
+          />
         );
       })}
     </div>
