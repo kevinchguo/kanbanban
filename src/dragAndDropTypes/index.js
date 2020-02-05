@@ -1,4 +1,4 @@
-export default Types = {
-  CARD: "card",
+export default {
+  TASK: "task",
   LIST: "list"
 };

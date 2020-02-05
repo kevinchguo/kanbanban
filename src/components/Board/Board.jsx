@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import ListItem from "../../containers/ListItem/ListItem";
 import ListNamingBox from "../../containers/ListNamingBox/ListNamingBox";
 
-import { loadUserBoards } from "../../actions";
-
 import styles from "./Board.module.scss";
+
+import { loadUserBoards } from "../../actions";
 
 class Board extends Component {
   constructor(props) {
@@ -67,18 +68,20 @@ class Board extends Component {
 
   handleDescription = e => {
     this.setState({ listDescription: e.target.value });
-    console.log(this.target.value);
   };
-
   render() {
+    console.log(this.props);
     return (
       <>
         <div className={styles.board}>
           <textarea
+            className={styles.boardTitle}
             placeholder="Name this board"
             onChange={this.handleBoardTitle}
           >
-            {this.state.boardTitle}
+            {this.props.boards
+              ? this.props.boards[this.state.currentBoard].title
+              : this.state.boards[0].boardTitle}
           </textarea>
           <div className={styles.listArea}>
             <div className={styles.newList}>

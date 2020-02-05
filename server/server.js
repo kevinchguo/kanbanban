@@ -34,5 +34,5 @@ app.use("/api/lists", listRouter);
 app.use("/api/cards", cardRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server started on PORT: ${PORT}`);
+  console.log(`Server started on PORTss: ${PORT}`);
 });
