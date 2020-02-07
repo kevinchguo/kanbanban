@@ -8,7 +8,6 @@ import ReduxThunk from "redux-thunk";
 import reducer from "./reducers";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
-import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 
 const composeEnhancers =
@@ -23,9 +22,7 @@ const store = createStore(reducer, enhancer);
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <DndProvider backend={Backend}>
-        <App />
-      </DndProvider>
+      <App />
     </Router>
   </Provider>,
   document.getElementById("root")

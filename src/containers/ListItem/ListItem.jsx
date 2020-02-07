@@ -1,73 +1,50 @@
-import React, { useRef, useState, useCallback } from "react";
-import { DropTarget } from "react-dnd";
-import update from "immutability-helper";
-
+import React, { useState, Component } from "react";
 import ItemTypes from "../../dragAndDropTypes";
 import Task from "../Task/Task";
-
 import styles from "./ListItem.module.scss";
+import { DragDropContext } from "react-dnd";
+const update = require("immutability-helper");
 
-const ListItem = ({ connectDropTarget, ...props }) => {
-  const ref = useRef(null);
-  const [tasks, setTasks] = useState(props);
-  console.log("ListsItem: ", tasks);
+class ListItem extends Component {
+  state = this.props;
+  moveCard = (dragIndex, hoverIndex) => {
+    const { tasks } = this.state;
+    const dragCard = tasks[dragIndex];
 
-  const moveCard = useCallback(
-    (id, atIndex) => {
-      const { card, index } = findCard(id);
-      setTasks(
-        update(tasks.tasks, {
-          $splice: [[index, 1], [atIndex, 0, card]]
-        })
-      );
-    },
-    [tasks.tasks]
-  );
+    this.setState(
+      update(this.state, {
+        tasks: {
+          $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]]
+        }
+      })
+    );
+  };
 
-  const findCard = useCallback(
-    id => {
-      const card = tasks.tasks.filter(c => `${c.id}` === id)[0];
-      return {
-        card,
-        index: tasks.tasks.indexOf(card)
-      };
-    },
-    [tasks.tasks]
-  );
+  render() {
+    return (
+      <div className={styles.listItem}>
+        <textarea className={styles.listName} placeholder="Name this List">
+          {this.state.listName}
+        </textarea>
+        {this.state.tasks ? (
+          this.state.tasks.map((task, index) => {
+            return (
+              <Task
+                key={task.id}
+                index={index}
+                length={index}
+                task={task}
+                tasks={this.state.tasks}
+                moveCard={this.moveCard}
+              />
+            );
+          })
+        ) : (
+          <Task />
+        )}
+      </div>
+    );
+  }
+}
 
-  connectDropTarget(ref);
-
-  return (
-    <div ref={ref} className={styles.listItem}>
-      <textarea
-        className={styles.listName}
-        placeholder="Name this List"
-        onChange={props.handleListName}
-      >
-        {props.listName}
-      </textarea>
-      {tasks.tasks ? (
-        tasks.tasks.map(task => {
-          return (
-            <Task
-              key={task.id}
-              length={tasks.tasks}
-              id={task.position}
-              description={task.description}
-              created={task.created_at}
-              updated={task.updated_at}
-              moveCard={moveCard}
-              findCard={findCard}
-            />
-          );
-        })
-      ) : (
-        <Task />
-      )}
-    </div>
-  );
-};
-
-export default DropTarget(ItemTypes.TASK, {}, connect => ({
-  connectDropTarget: connect.dropTarget()
-}))(ListItem);
+export default ListItem;
