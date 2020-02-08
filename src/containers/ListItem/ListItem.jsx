@@ -32,7 +32,6 @@ class ListItem extends Component {
               <Task
                 key={task.id}
                 index={index}
-                length={index}
                 task={task}
                 tasks={this.state.tasks}
                 moveCard={this.moveCard}

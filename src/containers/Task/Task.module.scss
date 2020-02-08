@@ -2,10 +2,12 @@
 
 .task {
   padding: 10px;
+  width: fit-content;
+  height: fit-content;
   border: none;
   border-radius: $border-radius;
   margin: 5px;
   box-shadow: $box-shadow;
   background-color: white;
-  opacity: 1;
+  cursor: move;
 }

@@ -1,16 +1,7 @@
 import React, { Component } from "react";
 import { findDOMNode } from "react-dom";
 import PropTypes from "prop-types";
-import {
-  DragSource,
-  DropTarget,
-  ConnectDropTarget,
-  ConnectDragSource,
-  DropTargetMonitor,
-  DropTargetConnector,
-  DragSourceConnector,
-  DragSourceMonitor
-} from "react-dnd";
+import { DragSource, DropTarget } from "react-dnd";
 import { XYCoord } from "dnd-core";
 import flow from "lodash/flow";
 import TimeAgo from "javascript-time-ago";
@@ -93,7 +84,6 @@ class Task extends Component {
     const {
       task,
       tasks,
-      length,
       index,
       isDragging,
       connectDragSource,
@@ -106,11 +96,11 @@ class Task extends Component {
       connectDropTarget &&
       connectDragSource(
         connectDropTarget(
-          <div className={styles.task}>
+          <div className={styles.task} style={{ opacity }}>
             <textarea className={styles.taskDescription}>
               {task.description}
             </textarea>
-            <div>{`I'm position ${length}`}</div>
+            <div>{`I'm position ${index}`}</div>
             <div>{`created ${timeAgo.format(new Date(task.created_at))}`}</div>
             <select className={styles.selectPosition}>
               <option selected="selected" disabled>
@@ -118,8 +108,7 @@ class Task extends Component {
               </option>
               {tasks ? (
                 tasks.map((options, index) => {
-                  let position = index + 1;
-                  return <ListPosition position={position} />;
+                  return <ListPosition position={index} />;
                 })
               ) : (
                 <ListPosition />

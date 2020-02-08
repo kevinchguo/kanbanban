@@ -12,44 +12,7 @@ class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentBoard: 0,
-      boards: [
-        {
-          boardTitle: "Practice board",
-          lists: [
-            {
-              listName: "Todo",
-              task: [
-                {
-                  taskName: "do this toodoo list pls",
-                  createdAt: "today",
-                  checked: false
-                },
-                {
-                  taskName: "do this toodoo list pls",
-                  createdAt: "today",
-                  checked: false
-                },
-                {
-                  taskName: "do this toodoo list pls",
-                  createdAt: "today",
-                  checked: false
-                }
-              ]
-            },
-            {
-              listName: "Completed",
-              task: [
-                {
-                  taskName: "blurange complete pls",
-                  createdAt: "today",
-                  checked: false
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      currentBoard: 0
     };
   }
 
@@ -81,7 +44,7 @@ class Board extends Component {
           >
             {this.props.boards
               ? this.props.boards[this.state.currentBoard].title
-              : this.state.boards[0].boardTitle}
+              : ""}
           </textarea>
           <div className={styles.listArea}>
             <div className={styles.newList}>
