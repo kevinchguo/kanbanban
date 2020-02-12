@@ -2,7 +2,6 @@ import React, { useState, Component } from "react";
 import ItemTypes from "../../dragAndDropTypes";
 import Task from "../Task/Task";
 import styles from "./ListItem.module.scss";
-import { DragDropContext } from "react-dnd";
 const update = require("immutability-helper");
 
 class ListItem extends Component {
@@ -23,9 +22,9 @@ class ListItem extends Component {
   render() {
     return (
       <div className={styles.listItem}>
-        <textarea className={styles.listName} placeholder="Name this List">
-          {this.state.listName}
-        </textarea>
+        <div className={styles.listName}>
+          {this.state.listName ? this.state.listName : "Name this list"}
+        </div>
         {this.state.tasks ? (
           this.state.tasks.map((task, index) => {
             return (

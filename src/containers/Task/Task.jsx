@@ -43,9 +43,6 @@ const cardTarget = {
     // Get pixels to the top
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-    // Only perform the move when the mouse has crossed half of the items height
-    // When dragging downwards, only move when the cursor is below 50%
-    // When dragging upwards, only move when the cursor is above 50%
     // Dragging downwards
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
@@ -56,13 +53,8 @@ const cardTarget = {
       return;
     }
 
-    // Time to actually perform the action
     props.moveCard(dragIndex, hoverIndex);
 
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
     monitor.getItem().index = hoverIndex;
   }
 };
@@ -97,9 +89,7 @@ class Task extends Component {
       connectDragSource(
         connectDropTarget(
           <div className={styles.task} style={{ opacity }}>
-            <textarea className={styles.taskDescription}>
-              {task.description}
-            </textarea>
+            <div className={styles.taskDescription}>{task.description}</div>
             <div>{`I'm position ${index}`}</div>
             <div>{`created ${timeAgo.format(new Date(task.created_at))}`}</div>
             <select className={styles.selectPosition}>

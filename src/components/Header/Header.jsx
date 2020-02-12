@@ -7,7 +7,7 @@ import { changeBoards } from "../../actions";
 
 class Header extends Component {
   render() {
-    console.log("Header: ", this.props.boards);
+    console.log();
     return (
       <>
         <div className={styles.header}>
@@ -16,7 +16,15 @@ class Header extends Component {
             {this.props.boards
               ? this.props.boards.map((title, index) => {
                   console.log(title);
-                  return <BoardList key={index} title={title.title} />;
+                  return (
+                    <BoardList
+                      key={index}
+                      id={index}
+                      currentBoard={this.props.currentBoard}
+                      setCurrentBoard={this.props.setCurrentBoard}
+                      title={title.title}
+                    />
+                  );
                 })
               : "No boards"}
           </div>

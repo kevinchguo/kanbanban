@@ -2,9 +2,16 @@
 
 .boardList {
   background-color: $grey-accent;
-  padding: 1px;
-  border-radius: $border-radius;
-  & :hover {
+  color: black;
+  font-size: 18pt;
+  text-align: center;
+  padding: 2px;
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  border-radius: $circle-border-radius;
+  &:hover {
     background-color: $highlight-accent;
+    cursor: pointer;
   }
 }

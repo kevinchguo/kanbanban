@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 
 import ListItem from "../../containers/ListItem/ListItem";
@@ -12,7 +12,11 @@ class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentBoard: 0
+      isClicked: false,
+      display: "block",
+      boardTitle: "",
+      listName: "",
+      taskDescription: ""
     };
   }
 
@@ -24,38 +28,62 @@ class Board extends Component {
     this.setState({ boardTitle: e.target.value });
   };
 
+  handleBoardTitleSubmit = e => {
+    this.setState({ isClicked: false });
+  };
+
   handleListName = e => {
     this.setState({ listName: e.target.value });
-    console.log(this.target.value);
   };
 
   handleDescription = e => {
-    this.setState({ listDescription: e.target.value });
+    this.setState({ taskDescription: e.target.value });
   };
+
+  titleIsClicked = () => {
+    this.setState({ isClicked: true });
+  };
+
   render() {
-    console.log(this.props);
+    const display = this.state.isClicked ? "none" : "block";
     return (
       <>
         <div className={styles.board}>
-          <textarea
+          <div
             className={styles.boardTitle}
-            placeholder="Name this board"
-            onChange={this.handleBoardTitle}
+            style={{ display }}
+            onClick={this.titleIsClicked}
           >
             {this.props.boards
-              ? this.props.boards[this.state.currentBoard].title
-              : ""}
-          </textarea>
+              ? this.props.boards[
+                  this.props.currentBoard ? this.props.currentBoard : 0
+                ].title
+              : "Name this board"}
+          </div>
+          <form onSubmit={this.handleBoardTitleSubmit}>
+            <input
+              type="text"
+              spellCheck={false}
+              maxLength={512}
+              value={`${
+                this.props.boards
+                  ? this.props.boards[
+                      this.props.currentBoard ? this.props.currentBoard : 0
+                    ].title
+                  : "Name this board"
+              }`}
+            />
+          </form>
           <div className={styles.listArea}>
             <div className={styles.newList}>
               {this.props.boards
-                ? this.props.boards[this.state.currentBoard].list.map(
-                    column => {
-                      return (
-                        <ListItem listName={column.title} tasks={column.card} />
-                      );
-                    }
-                  )
+                ? this.props.boards[
+                    this.props.currentBoard ? this.props.currentBoard : 0
+                  ].list.map(column => {
+                    return (
+                      <ListItem listName={column.title} tasks={column.card} />
+                    );
+                  })
                 : this.state.board}
             </div>
           </div>
