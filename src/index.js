@@ -8,7 +8,6 @@ import ReduxThunk from "redux-thunk";
 import reducer from "./reducers";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
-import Backend from "react-dnd-html5-backend";
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

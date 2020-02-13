@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { findDOMNode } from "react-dom";
 import PropTypes from "prop-types";
 import { DragSource, DropTarget } from "react-dnd";
-import { XYCoord } from "dnd-core";
 import flow from "lodash/flow";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -59,14 +58,16 @@ const cardTarget = {
   }
 };
 
+const handleTaskPositionChange = e => {
+  console.log(e.target.value.position);
+};
+
 class Task extends Component {
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
-    id: PropTypes.any.isRequired,
-    text: PropTypes.string.isRequired,
     moveCard: PropTypes.func.isRequired
   };
 
@@ -92,13 +93,14 @@ class Task extends Component {
             <div className={styles.taskDescription}>{task.description}</div>
             <div>{`I'm position ${index}`}</div>
             <div>{`created ${timeAgo.format(new Date(task.created_at))}`}</div>
-            <select className={styles.selectPosition}>
-              <option selected="selected" disabled>
-                Move
-              </option>
+            <select
+              className={styles.selectPosition}
+              value={index}
+              onChange={handleTaskPositionChange}
+            >
               {tasks ? (
                 tasks.map((options, index) => {
-                  return <ListPosition position={index} />;
+                  return <ListPosition key={index} position={index} />;
                 })
               ) : (
                 <ListPosition />

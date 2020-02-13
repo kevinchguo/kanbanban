@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import styles from "./Header.module.scss";
 import BoardList from "./BoardList";
-import Board from "../Board/Board";
-import { changeBoards } from "../../actions";
 
 class Header extends Component {
   render() {

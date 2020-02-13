@@ -1,4 +1,4 @@
-import React, { setState } from "react";
+import React from "react";
 import styles from "./BoardList.module.scss";
 
 const BoardList = props => {

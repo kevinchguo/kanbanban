@@ -1,5 +1,4 @@
-import React, { useState, Component } from "react";
-import ItemTypes from "../../dragAndDropTypes";
+import React, { Component } from "react";
 import Task from "../Task/Task";
 import styles from "./ListItem.module.scss";
 const update = require("immutability-helper");
