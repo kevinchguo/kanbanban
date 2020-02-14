@@ -1,7 +1,7 @@
 const bookshelf = require("../bookshelf");
 require("../models/Board");
 require("../models/List");
-require("../models/Card");
+require("../models/Task");
 
 class User extends bookshelf.Model {
   get tableName() {

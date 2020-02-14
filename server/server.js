@@ -14,7 +14,7 @@ const PORT = process.env.EXPRESS_HOST_PORT;
 const userRouter = require("./routes/api/users");
 const boardRouter = require("./routes/api/boards");
 const listRouter = require("./routes/api/lists");
-const cardRouter = require("./routes/api/cards");
+const taskRouter = require("./routes/api/tasks");
 
 require("dotenv").config();
 require("./configPassport/passport")(passport);
@@ -31,7 +31,7 @@ app.use(decorator);
 app.use("/api/users", userRouter);
 app.use("/api/boards", boardRouter);
 app.use("/api/lists", listRouter);
-app.use("/api/cards", cardRouter);
+app.use("/api/tasks", taskRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORTss: ${PORT}`);

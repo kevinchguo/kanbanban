@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { findDOMNode } from "react-dom";
 import PropTypes from "prop-types";
 import { DragSource, DropTarget } from "react-dnd";
 import flow from "lodash/flow";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-
+import { updateTaskDescription } from "../../actions";
 import ItemTypes from "../../dragAndDropTypes";
 import ListPosition from "../ListPosition";
 
@@ -63,6 +64,26 @@ const handleTaskPositionChange = e => {
 };
 
 class Task extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isClicked: false,
+      taskDescription: "",
+      taskId: "",
+      ...props
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props !== prevProps) {
+      this.setState({
+        taskDescription: this.props.tasks.description,
+        listId: this.props.listId,
+        taskId: this.props.tasks.id
+      });
+    }
+  }
+
   static propTypes = {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
@@ -71,17 +92,33 @@ class Task extends Component {
     moveCard: PropTypes.func.isRequired
   };
 
+  handleDescription = e => {
+    this.setState({ taskDescription: e.target.value });
+  };
+
+  handleDescriptionSubmit = e => {
+    e.preventDefault();
+    this.setState({ isClicked: false });
+    let newTaskDescription = {
+      taskDescription: this.state.taskDescription,
+      taskId: this.state.taskId,
+      listId: this.state.listId,
+      userId: this.state.userId,
+      username: this.state.username
+    };
+    this.props.updateTaskDescription(newTaskDescription);
+  };
+
+  taskIsClicked = e => {
+    e.preventDefault();
+    this.setState({ isClicked: true });
+    console.log("i got clicked");
+  };
+
   render() {
     TimeAgo.addLocale(en);
     const timeAgo = new TimeAgo("en-US");
-    const {
-      task,
-      tasks,
-      index,
-      isDragging,
-      connectDragSource,
-      connectDropTarget
-    } = this.props;
+    const { isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
 
     return (
@@ -90,16 +127,20 @@ class Task extends Component {
       connectDragSource(
         connectDropTarget(
           <div className={styles.task} style={{ opacity }}>
-            <div className={styles.taskDescription}>{task.description}</div>
-            <div>{`I'm position ${index}`}</div>
-            <div>{`created ${timeAgo.format(new Date(task.created_at))}`}</div>
+            <div className={styles.taskDescription}>
+              {this.state.taskDescription}
+            </div>
+            <div>{`I'm position ${this.state.index}`}</div>
+            <div>{`created ${timeAgo.format(
+              new Date(this.state.tasks.created_at)
+            )}`}</div>
             <select
               className={styles.selectPosition}
-              value={index}
+              value={this.state.index}
               onChange={handleTaskPositionChange}
             >
-              {tasks ? (
-                tasks.map((options, index) => {
+              {this.state.tasks ? (
+                this.state.tasks.map((options, index) => {
                   return <ListPosition key={index} position={index} />;
                 })
               ) : (
@@ -113,6 +154,14 @@ class Task extends Component {
   }
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    updateTaskDescription: data => {
+      return dispatch(updateTaskDescription(data));
+    }
+  };
+};
+
 export default flow(
   DragSource(ItemTypes.TASK, cardSource, (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
@@ -120,5 +169,9 @@ export default flow(
   })),
   DropTarget(ItemTypes.TASK, cardTarget, connect => ({
     connectDropTarget: connect.dropTarget()
-  }))
+  })),
+  connect(
+    null,
+    mapDispatchToProps
+  )
 )(Task);

@@ -5,7 +5,6 @@ import BoardList from "./BoardList";
 
 class Header extends Component {
   render() {
-    console.log();
     return (
       <>
         <div className={styles.header}>
@@ -13,7 +12,6 @@ class Header extends Component {
           <div className={styles.boardList}>
             {this.props.boards
               ? this.props.boards.map((title, index) => {
-                  console.log(title);
                   return (
                     <BoardList
                       key={index}

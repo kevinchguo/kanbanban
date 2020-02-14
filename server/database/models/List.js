@@ -1,6 +1,6 @@
 const bookshelf = require("../bookshelf");
 require("../models/Board");
-require("../models/Card");
+require("../models/Task");
 
 class List extends bookshelf.Model {
   get tableName() {
@@ -19,8 +19,8 @@ class List extends bookshelf.Model {
     return this.hasOne("Board", "id", "board_id");
   }
 
-  card() {
-    return this.hasMany("Card");
+  task() {
+    return this.hasMany("Task");
   }
 }
 

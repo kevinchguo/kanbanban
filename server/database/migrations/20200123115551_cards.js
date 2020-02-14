@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable("cards", table => {
+  return knex.schema.createTable("tasks", table => {
     table.increments();
     table
       .integer("list_id")
@@ -13,5 +13,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable("cards");
+  return knex.schema.dropTable("tasks");
 };

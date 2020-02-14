@@ -5,7 +5,7 @@ const User = require("../../../database/models/User");
 userRouter.get("/", (req, res) => {
   return req.db.User.where({ id: 1 })
     .fetchAll({
-      withRelated: ["board", "board.list", "board.list.card"]
+      withRelated: ["board", "board.list", "board.list.task"]
     })
     .then(results => {
       res.status(200).json(results);
