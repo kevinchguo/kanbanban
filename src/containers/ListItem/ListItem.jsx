@@ -53,9 +53,7 @@ class ListItem extends Component {
   listIsClicked = e => {
     e.preventDefault();
     this.setState({ isClicked: true });
-    console.log("i got clicked");
   };
-
   render() {
     return (
       <div className={styles.listItem}>
@@ -76,15 +74,15 @@ class ListItem extends Component {
             {this.state.listName ? this.state.listName : "Name this list"}
           </div>
         )}
-        {this.state.tasks ? (
-          this.state.tasks.map((task, index) => {
+        {this.state.lists.task ? (
+          this.state.lists.task.map((task, index) => {
             return (
               <Task
                 key={task.id}
                 index={index}
                 task={task}
-                userId={this.state.userId}
-                listId={this.state.listId}
+                userId={parseInt(this.state.userId)}
+                listId={parseInt(this.state.listId)}
                 tasks={this.state.tasks}
                 moveCard={this.moveCard}
                 divIsClicked={this.props.divIsClicked}

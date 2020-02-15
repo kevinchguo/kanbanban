@@ -89,7 +89,6 @@ class Board extends Component {
                 ? this.props.boards[
                     this.props.currentBoard ? this.props.currentBoard : 0
                   ].list.map((column, index) => {
-                    console.log("Lists of todo: ", column);
                     return (
                       <ListItem
                         key={index}

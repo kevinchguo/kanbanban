@@ -77,9 +77,9 @@ class Task extends Component {
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
       this.setState({
-        taskDescription: this.props.tasks.description,
+        taskDescription: this.props.task.description,
         listId: this.props.listId,
-        taskId: this.props.tasks.id
+        taskId: this.props.task.id
       });
     }
   }
@@ -88,6 +88,9 @@ class Task extends Component {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     index: PropTypes.number.isRequired,
+    task: PropTypes.object.isRequired,
+    userId: PropTypes.number.isRequired,
+    listId: PropTypes.number.isRequired,
     isDragging: PropTypes.bool.isRequired,
     moveCard: PropTypes.func.isRequired
   };
@@ -112,7 +115,6 @@ class Task extends Component {
   taskIsClicked = e => {
     e.preventDefault();
     this.setState({ isClicked: true });
-    console.log("i got clicked");
   };
 
   render() {
@@ -120,19 +122,35 @@ class Task extends Component {
     const timeAgo = new TimeAgo("en-US");
     const { isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
-
     return (
       connectDragSource &&
       connectDropTarget &&
       connectDragSource(
         connectDropTarget(
           <div className={styles.task} style={{ opacity }}>
-            <div className={styles.taskDescription}>
-              {this.state.taskDescription}
-            </div>
-            <div>{`I'm position ${this.state.index}`}</div>
+            {this.state.isClicked ? (
+              <input
+                autoFocus
+                className={styles.taskDescription}
+                type="text"
+                spellCheck={false}
+                maxLength={512}
+                name="taskDescription"
+                value={this.state.taskDescription}
+                onBlur={this.handleDescriptionSubmit}
+                onChange={this.handleDescription}
+              />
+            ) : (
+              <div
+                className={styles.taskDescription}
+                onClick={this.taskIsClicked}
+              >
+                {this.state.taskDescription}
+              </div>
+            )}
+            <div>{`I'm position ${this.props.index}`}</div>
             <div>{`created ${timeAgo.format(
-              new Date(this.state.tasks.created_at)
+              new Date(this.props.task.created_at)
             )}`}</div>
             <select
               className={styles.selectPosition}

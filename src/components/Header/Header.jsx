@@ -10,6 +10,9 @@ class Header extends Component {
         <div className={styles.header}>
           Toodoo App
           <div className={styles.boardList}>
+            <button className={styles.addBoards}>
+              <i className="fas fa-plus"></i>
+            </button>
             {this.props.boards
               ? this.props.boards.map((title, index) => {
                   return (

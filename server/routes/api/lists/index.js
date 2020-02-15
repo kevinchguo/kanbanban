@@ -3,7 +3,6 @@ const listRouter = express.Router();
 const List = require("../../../database/models/List");
 
 listRouter.put("/", (req, res) => {
-  console.log(req.body);
   const title = req.body.listName;
   const id = req.body.listId;
   const user_id = req.body.userId;
