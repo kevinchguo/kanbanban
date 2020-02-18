@@ -4,6 +4,7 @@ export const USER_BOARDS = "USER_BOARDS";
 export const UPDATE_BOARD_TITLE = "UPDATE_BOARD_TITLE";
 export const UPDATE_LIST_NAME = "UPDATE_LIST_NAME";
 export const UPDATE_TASK_DESCRIPTION = "UPDATE_TASK_DESCRIPTION";
+export const ADD_NEW_BOARD = "ADD_NEW_BOARD";
 
 export const loadUserBoards = () => async dispatch => {
   await Axios.get("/api/users")
@@ -49,6 +50,19 @@ export const updateTaskDescription = data => async dispatch => {
     .then(data => {
       dispatch({
         type: UPDATE_TASK_DESCRIPTION,
+        payload: data.data[0]
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
+export const addNewBoard = data => async dispatch => {
+  await Axios.post("/api/boards", data)
+    .then(data => {
+      dispatch({
+        type: ADD_NEW_BOARD,
         payload: data.data[0]
       });
     })

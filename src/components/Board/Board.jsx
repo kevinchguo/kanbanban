@@ -13,8 +13,7 @@ class Board extends Component {
       display: "",
       boardTitle: "",
       boardId: "",
-      user: "",
-      userId: ""
+      user: ""
     };
   }
 

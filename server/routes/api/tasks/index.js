@@ -9,13 +9,14 @@ taskRouter.put("/", (req, res) => {
   const list_id = req.body.listId;
   return new Task({ list_id: list_id, id: id })
     .fetch()
-    .then(newListName => {
-      newListName.set({ description: description }).save();
+    .then(newTaskDescription => {
+      newTaskDescription.set({ description: description }).save();
       return req.db.User.where({ id: user_id })
         .fetchAll({
           withRelated: ["board", "board.list", "board.list.task"]
         })
         .then(results => {
+          console.log(json(results));
           res.status(200).json(results);
         });
     })

@@ -106,7 +106,7 @@ class Task extends Component {
       taskDescription: this.state.taskDescription,
       taskId: this.state.taskId,
       listId: this.state.listId,
-      userId: this.state.userId,
+      userId: this.props.userId,
       username: this.state.username
     };
     this.props.updateTaskDescription(newTaskDescription);

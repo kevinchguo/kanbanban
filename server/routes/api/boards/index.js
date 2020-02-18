@@ -10,17 +10,20 @@ boardRouter.put("/", (req, res) => {
   return new Board({ user_id: user_id, id: id })
     .fetch()
     .then(newTitle => {
+      console.log("updated title");
       newTitle.set({ title: title }).save();
       return req.db.User.where({ id: user_id })
         .fetchAll({
           withRelated: ["board", "board.list", "board.list.task"]
         })
         .then(results => {
+          console.log("returned user info");
+
           res.status(200).json(results);
         });
     })
     .catch(() => {
-      res.status(400).json(newTitle);
+      res.status(400);
     });
 });
 

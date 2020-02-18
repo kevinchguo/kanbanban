@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./index.scss";
 import App from "./App";
 import { Provider } from "react-redux";
@@ -8,6 +10,8 @@ import ReduxThunk from "redux-thunk";
 import reducer from "./reducers";
 import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
+
+library.add(faPlus);
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

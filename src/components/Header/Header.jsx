@@ -1,17 +1,25 @@
 import React, { Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
 import styles from "./Header.module.scss";
 import BoardList from "./BoardList";
 
 class Header extends Component {
+  handleAddNewBoard = e => {
+    console.log("opening newboard modal");
+  };
+
   render() {
     return (
       <>
         <div className={styles.header}>
           Toodoo App
           <div className={styles.boardList}>
-            <button className={styles.addBoards}>
-              <i className="fas fa-plus"></i>
+            <button
+              className={styles.addBoards}
+              onClick={this.handleAddNewBoard}
+            >
+              <FontAwesomeIcon icon="plus"></FontAwesomeIcon>
             </button>
             {this.props.boards
               ? this.props.boards.map((title, index) => {
