@@ -7,7 +7,24 @@ import {
 } from "../actions";
 
 const initialState = {
-  boards: {},
+  boards: {
+    id: 0,
+    email: "asdf@asdf.com",
+    username: "user",
+    board: [
+      {
+        id: 0,
+        title: "placeholder boardTitle",
+        list: [
+          {
+            id: 0,
+            title: "placeholder listName",
+            task: [{ id: 0, description: "placeholder taskDescription" }]
+          }
+        ]
+      }
+    ]
+  },
   userId: {},
   username: {}
 };

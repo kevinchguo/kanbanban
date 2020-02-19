@@ -16,6 +16,7 @@ listRouter.put("/", (req, res) => {
           withRelated: ["board", "board.list", "board.list.task"]
         })
         .then(results => {
+          console.log("List name updated");
           res.status(200).json(results);
         });
     })

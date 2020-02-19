@@ -1,27 +1,15 @@
 import React, { Component } from "react";
+import { Draggable } from "react-beautiful-dnd";
 import { connect } from "react-redux";
 import Task from "../Task/Task";
 import styles from "./ListItem.module.scss";
 import { updateListName } from "../../actions";
-const update = require("immutability-helper");
 
 class ListItem extends Component {
   constructor(props) {
     super(props);
     this.state = { isClicked: false, listName: "", listId: "", ...props };
   }
-  moveCard = (dragIndex, hoverIndex) => {
-    const { tasks } = this.state;
-    const dragCard = tasks[dragIndex];
-
-    this.setState(
-      update(this.state, {
-        tasks: {
-          $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]]
-        }
-      })
-    );
-  };
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
@@ -47,7 +35,12 @@ class ListItem extends Component {
       userId: this.state.userId,
       username: this.state.username
     };
-    this.props.updateListName(newListName);
+    if (this.state.listName === this.props.lists.title) {
+      return console.log("Same listName, didn't submit");
+    } else {
+      this.props.updateListName(newListName);
+      console.log("Submitted updated listName");
+    }
   };
 
   listIsClicked = e => {
@@ -55,8 +48,17 @@ class ListItem extends Component {
     this.setState({ isClicked: true });
   };
   render() {
+    const { provided, snapshot, innerRef } = this.props;
     return (
-      <div className={styles.listItem}>
+      <div
+        className={styles.listItem}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        ref={innerRef}
+        style={{
+          background: snapshot.isDraggingOver ? "lightblue" : "lightgrey"
+        }}
+      >
         {this.state.isClicked ? (
           <input
             autoFocus
@@ -77,22 +79,31 @@ class ListItem extends Component {
         {this.state.lists.task ? (
           this.state.lists.task.map((task, index) => {
             return (
-              <Task
-                key={task.id}
-                index={index}
-                task={task}
-                userId={parseInt(this.state.userId)}
-                listId={parseInt(this.state.listId)}
-                tasks={this.state.tasks}
-                moveCard={this.moveCard}
-                divIsClicked={this.props.divIsClicked}
-                isClicked={this.props.isClicked}
-              />
+              <Draggable key={task.id} draggableId={`${task.id}`} index={index}>
+                {(provided, snapshot) => {
+                  return (
+                    <Task
+                      provided={provided}
+                      snapshot={snapshot}
+                      innerRef={provided.innerRef}
+                      key={task.id}
+                      index={index}
+                      task={task}
+                      userId={parseInt(this.state.userId)}
+                      listId={parseInt(this.state.listId)}
+                      tasks={this.state.tasks}
+                      divIsClicked={this.props.divIsClicked}
+                      isClicked={this.props.isClicked}
+                    />
+                  );
+                }}
+              </Draggable>
             );
           })
         ) : (
           <Task />
         )}
+        {provided.placeholder}
       </div>
     );
   }

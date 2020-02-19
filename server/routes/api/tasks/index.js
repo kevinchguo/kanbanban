@@ -16,6 +16,7 @@ taskRouter.put("/", (req, res) => {
           withRelated: ["board", "board.list", "board.list.task"]
         })
         .then(results => {
+          console.log("Task description updated");
           console.log(json(results));
           res.status(200).json(results);
         });
