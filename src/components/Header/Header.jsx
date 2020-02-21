@@ -42,7 +42,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-  return { boards: state.boards.board };
+  return { boards: state.user.board };
 };
 
 const mapDispachToProps = dispatch => {

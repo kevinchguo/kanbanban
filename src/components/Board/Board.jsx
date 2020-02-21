@@ -1,9 +1,11 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
+import { Card } from "@material-ui/core";
+import ListItem from "../ListItem";
+import AddButton from "../AddButton";
+import styles from "./Board.module.scss";
 import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import ListItem from "../../containers/ListItem/ListItem";
 import { loadUserBoards, updateBoardTitle } from "../../actions";
-import styles from "./Board.module.scss";
 
 class Board extends Component {
   constructor(props) {
@@ -23,11 +25,12 @@ class Board extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
+      const { user, currentBoard, userId, username } = this.props;
       this.setState({
-        boardTitle: this.props.boards[this.props.currentBoard].title,
-        userId: this.props.userId,
-        username: this.props.username,
-        boardId: this.props.boards[this.props.currentBoard].id
+        boardTitle: user.board[currentBoard].title,
+        userId: userId,
+        username: username,
+        boardId: user.board[currentBoard].id
       });
     }
   }
@@ -43,15 +46,14 @@ class Board extends Component {
   handleBoardTitleSubmit = e => {
     e.preventDefault();
     this.setState({ isClicked: false });
+    const { boardTitle, boardId, userId, username } = this.state;
     let newBoardTitle = {
-      title: this.state.boardTitle,
-      boardId: this.state.boardId,
-      userId: this.state.userId,
-      username: this.state.username
+      title: boardTitle,
+      boardId: boardId,
+      userId: userId,
+      username: username
     };
-    if (
-      this.state.boardTitle === this.props.boards[this.props.currentBoard].title
-    ) {
+    if (boardTitle === this.props.boards[this.props.currentBoard].title) {
       return console.log("Same title, didn't submit");
     } else {
       this.props.updateBoardTitle(newBoardTitle);
@@ -64,20 +66,11 @@ class Board extends Component {
     this.setState({ isClicked: true });
   };
 
-  onDragEnd = (result, columns) => {
-    if (!result.destination) return;
-    const { source, destination } = result;
-    const column = columns[source.droppableId];
-    const copiedTasks = [...column.task];
-    const [removed] = copiedTasks.splice(source.index, 1);
-    copiedTasks.splice(destination.index, 0, removed);
-    this.setState({});
-  };
-
   render() {
+    const { user, currentBoard } = this.props;
     return (
-      <>
-        <div className={styles.board}>
+      <div style={{ backgroundColor: "cornflowerblue", height: "100%" }}>
+        <div className={styles.boardTitle}>
           {this.state.isClicked ? (
             <input
               autoFocus
@@ -92,63 +85,36 @@ class Board extends Component {
             />
           ) : (
             <div className={styles.boardTitle} onClick={this.titleIsClicked}>
-              {this.props.boards
-                ? this.props.boards[this.props.currentBoard].title
-                : this.state.boardTitle}
+              {user.board[currentBoard].title}
             </div>
           )}
-          <div className={styles.listArea}>
-            <DragDropContext
-              onDragEnd={results => {
-                console.log(results);
-              }}
-            >
-              <div className={styles.newList}>
-                {this.props.boards
-                  ? this.props.boards[
-                      this.props.currentBoard ? this.props.currentBoard : 0
-                    ].list.map((column, index) => {
-                      return (
-                        <Droppable
-                          key={column.id}
-                          droppableId={`${column.id}`}
-                          index={index}
-                        >
-                          {(provided, snapshot) => {
-                            return (
-                              <ListItem
-                                provided={provided}
-                                snapshot={snapshot}
-                                innerRef={provided.innerRef}
-                                key={index}
-                                userId={this.state.userId}
-                                boardId={this.state.boardId}
-                                lists={column}
-                                listName={column.title}
-                                tasks={column.card}
-                              />
-                            );
-                          }}
-                        </Droppable>
-                      );
-                    })
-                  : this.state.board}
-              </div>
-            </DragDropContext>
-          </div>
         </div>
-      </>
+
+        <div className={styles.listArea}>
+          {user.board[currentBoard].list.map((column, index) => {
+            return (
+              <ListItem
+                key={index}
+                userId={this.state.userId}
+                boardId={this.state.boardId}
+                lists={column}
+                listName={column.title}
+                tasks={column.card}
+              />
+            );
+          })}
+          <AddButton list></AddButton>
+        </div>
+      </div>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    username: state.username,
-    userId: state.userId,
-    boards: state.boards.board
-  };
-};
+const mapStateToProps = state => ({
+  username: state.username,
+  userId: state.userId,
+  user: state.user
+});
 
 const mapDispatchToProps = dispatch => {
   return {

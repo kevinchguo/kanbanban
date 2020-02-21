@@ -62,19 +62,9 @@ class Task extends Component {
   render() {
     TimeAgo.addLocale(en);
     const timeAgo = new TimeAgo("en-US");
-    const { provided, innerRef } = this.props;
 
     return (
-      <div
-        className={styles.task}
-        {...provided.draggableProps}
-        {...provided.dragHandleProps}
-        ref={innerRef}
-        style={{
-          userSelect: "none",
-          ...provided.draggableProps.style
-        }}
-      >
+      <div className={styles.task}>
         {this.state.isClicked ? (
           <input
             autoFocus

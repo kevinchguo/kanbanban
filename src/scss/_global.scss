@@ -9,17 +9,22 @@ html * {
 }
 
 input,
-select,
 option,
 textarea {
   font-size: 1em;
-  border: 0;
+  height: 60px;
+  border: none;
   background: 0;
   border-radius: $border-radius;
   resize: none;
+  width: 100%;
+  overflow: hidden;
 
   &:focus {
-    border: 1px solid $orange;
+    width: 100%;
+    overflow: hidden;
+    outline: none;
+    resize: none;
   }
 }
 
@@ -40,8 +45,5 @@ a {
 button {
   &:focus {
     outline: 0;
-  }
-
-  &:hover {
   }
 }
