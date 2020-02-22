@@ -86,7 +86,7 @@ class Task extends Component {
         <div>{`created ${timeAgo.format(
           new Date(this.props.task.created_at)
         )}`}</div>
-        <select
+        {/* <select
           className={styles.selectPosition}
           value={this.state.index}
           onChange={handleTaskPositionChange}
@@ -98,7 +98,7 @@ class Task extends Component {
           ) : (
             <ListPosition />
           )}
-        </select>
+        </select> */}
       </div>
     );
   }

@@ -6,6 +6,7 @@ import styles from "./Board.module.scss";
 import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { loadUserBoards, updateBoardTitle } from "../../actions";
+import ListPosition from "../ListPosition";
 
 class Board extends Component {
   constructor(props) {
@@ -26,12 +27,14 @@ class Board extends Component {
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
       const { user, currentBoard, userId, username } = this.props;
-      this.setState({
-        boardTitle: user.board[currentBoard].title,
-        userId: userId,
-        username: username,
-        boardId: user.board[currentBoard].id
-      });
+      if (user) {
+        this.setState({
+          boardTitle: user.board[currentBoard].title,
+          userId: userId,
+          username: username,
+          boardId: user.board[currentBoard].id
+        });
+      }
     }
   }
 
@@ -85,25 +88,39 @@ class Board extends Component {
             />
           ) : (
             <div className={styles.boardTitle} onClick={this.titleIsClicked}>
-              {user.board[currentBoard].title}
+              {user ? user.board[currentBoard].title : ""}
             </div>
           )}
         </div>
 
         <div className={styles.listArea}>
-          {user.board[currentBoard].list.map((column, index) => {
-            return (
-              <ListItem
-                key={index}
-                userId={this.state.userId}
-                boardId={this.state.boardId}
-                lists={column}
-                listName={column.title}
-                tasks={column.card}
-              />
-            );
-          })}
-          <AddButton list></AddButton>
+          {user
+            ? user.board[currentBoard].list.map((column, index) => {
+                return (
+                  <ListItem
+                    key={index}
+                    userId={this.state.userId}
+                    boardId={this.state.boardId}
+                    lists={column}
+                    listPosition={column.position}
+                    listName={column.title}
+                    tasks={column.task}
+                  />
+                );
+              })
+            : ""}
+          <AddButton
+            list
+            userId={this.state.userId}
+            boardId={this.state.boardId}
+            listPosition={
+              user
+                ? user.board[currentBoard].list[
+                    user.board[currentBoard].list.length - 1
+                  ].position
+                : Number(0.0).toFixed(2)
+            }
+          ></AddButton>
         </div>
       </div>
     );

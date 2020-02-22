@@ -14,7 +14,19 @@ boardRouter.put("/", (req, res) => {
       newTitle.set({ title: title }).save();
       return req.db.User.where({ id: user_id })
         .fetchAll({
-          withRelated: ["board", "board.list", "board.list.task"]
+          withRelated: [
+            "board",
+            {
+              "board.list": qb => {
+                qb.orderBy("position", "asc");
+              }
+            },
+            {
+              "board.list.task": qb => {
+                qb.orderBy("position", "asc");
+              }
+            }
+          ]
         })
         .then(results => {
           console.log("returned user info");

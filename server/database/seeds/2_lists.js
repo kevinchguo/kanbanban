@@ -8,17 +8,17 @@ exports.seed = function(knex) {
         {
           board_id: 1,
           title: "Todo",
-          position: 1
+          position: 2.0
         },
         {
           board_id: 1,
           title: "Doing",
-          position: 2
+          position: 3.0
         },
         {
           board_id: 1,
           title: "Completed",
-          position: 3
+          position: 1.0
         }
       ]);
     });

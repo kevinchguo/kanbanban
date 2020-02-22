@@ -15,10 +15,12 @@ class ListItem extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
+      const { userId, lists, boardId } = this.props;
       this.setState({
-        listName: this.props.lists.title,
-        boardId: this.props.boardId,
-        listId: this.props.lists.id
+        userId: userId,
+        listName: lists.title,
+        boardId: boardId,
+        listId: lists.id
       });
     }
   }
@@ -50,6 +52,8 @@ class ListItem extends Component {
     this.setState({ isClicked: true });
   };
   render() {
+    const { listName, userId, listId, tasks, lists } = this.state;
+    const { divIsClicked, isClicked } = this.props;
     return (
       <>
         <div className={styles.listItem}>
@@ -59,32 +63,42 @@ class ListItem extends Component {
               spellCheck={false}
               maxLength={512}
               name="listName"
-              value={this.state.listName}
+              value={listName}
               onBlur={this.handleListNameSubmit}
               onChange={this.handleListName}
             ></Textarea>
           ) : (
             <div className={styles.listName} onClick={this.listIsClicked}>
-              {this.state.listName ? this.state.listName : "Name this list"}
+              {listName ? listName : "Name this list"}
             </div>
           )}
           <div className={styles.taskArea}>
-            {this.state.lists.task.map((task, index) => {
-              return (
-                <Task
-                  key={task.id}
-                  index={index}
-                  task={task}
-                  userId={parseInt(this.state.userId)}
-                  listId={parseInt(this.state.listId)}
-                  tasks={this.state.tasks}
-                  divIsClicked={this.props.divIsClicked}
-                  isClicked={this.props.isClicked}
-                />
-              );
-            })}
+            {lists
+              ? lists.task.map((task, index) => {
+                  return (
+                    <Task
+                      key={task.id}
+                      index={index}
+                      task={task}
+                      userId={parseInt(userId)}
+                      listId={parseInt(listId)}
+                      tasks={tasks}
+                      divIsClicked={divIsClicked}
+                      isClicked={isClicked}
+                    />
+                  );
+                })
+              : ""}
           </div>
-          <AddButton></AddButton>
+          <AddButton
+            userId={parseInt(userId)}
+            listId={parseInt(listId)}
+            taskPosition={
+              tasks[tasks.length === 0 ? 0 : tasks.length - 1] === undefined
+                ? Number(0.0).toFixed(2)
+                : tasks[tasks.length - 1].position
+            }
+          ></AddButton>
         </div>
       </>
     );

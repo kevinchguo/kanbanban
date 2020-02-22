@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { addNewList, addNewTask, loadUserBoards } from "../../actions";
 import AddIcon from "@material-ui/icons/Add";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
@@ -54,6 +56,47 @@ class AddButton extends Component {
 
   submitNewListOrForm = () => {
     this.setState({ formOpen: false });
+    const { submitText } = this.state;
+    const { list } = this.props;
+    if (submitText !== "") {
+      if (list) {
+        this.submitNewList();
+      } else {
+        this.submitNewCard();
+      }
+    }
+  };
+
+  submitNewList = () => {
+    this.setState({ formOpen: false });
+    const { listPosition, addNewList, boardId, userId } = this.props;
+    const { submitText } = this.state;
+    let newList = {
+      user_id: userId,
+      board_id: boardId,
+      title: submitText,
+      position: parseInt(Number(listPosition) + 1).toFixed(2)
+    };
+    if (submitText !== "") {
+      this.setState({ submitText: "" });
+      addNewList(newList);
+    }
+  };
+
+  submitNewCard = () => {
+    this.setState({ formOpen: false });
+    const { listId, userId, taskPosition, addNewTask } = this.props;
+    const { submitText } = this.state;
+    let newCard = {
+      user_id: userId,
+      list_id: listId,
+      description: submitText,
+      position: parseInt(Number(taskPosition) + 1).toFixed(2)
+    };
+    if (submitText !== "") {
+      this.setState({ submitText: "" });
+      addNewTask(newCard);
+    }
   };
 
   renderForm = () => {
@@ -91,6 +134,7 @@ class AddButton extends Component {
         <div className={styles.buttonGroup}>
           <Button
             variant="contained"
+            onMouseDown={list ? this.submitNewList : this.submitNewCard}
             style={{ color: "white", backgroundColor: "#5aac44" }}
           >
             {buttonText}
@@ -106,4 +150,21 @@ class AddButton extends Component {
   }
 }
 
-export default AddButton;
+const mapDispatchToProps = dispatch => {
+  return {
+    loadUserBoards: () => {
+      return dispatch(loadUserBoards());
+    },
+    addNewTask: data => {
+      return dispatch(addNewTask(data));
+    },
+    addNewList: data => {
+      return dispatch(addNewList(data));
+    }
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AddButton);

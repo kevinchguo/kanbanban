@@ -2,6 +2,43 @@ const express = require("express");
 const listRouter = express.Router();
 const List = require("../../../database/models/List");
 
+listRouter.post("/", (req, res) => {
+  const { user_id, board_id, position, title } = req.body;
+  let newList = {
+    board_id: board_id,
+    position: position,
+    title: title
+  };
+  return new List(newList)
+    .save()
+    .then(() => {
+      console.log(user_id);
+
+      return req.db.User.where({ id: user_id })
+        .fetchAll({
+          withRelated: [
+            "board",
+            {
+              "board.list": qb => {
+                qb.orderBy("position", "asc");
+              }
+            },
+            {
+              "board.list.task": qb => {
+                qb.orderBy("position", "asc");
+              }
+            }
+          ]
+        })
+        .then(results => {
+          res.status(200).json(results);
+        });
+    })
+    .catch(() => {
+      res.status(400);
+    });
+});
+
 listRouter.put("/", (req, res) => {
   const title = req.body.listName;
   const id = req.body.listId;
@@ -16,7 +53,7 @@ listRouter.put("/", (req, res) => {
           withRelated: ["board", "board.list", "board.list.task"]
         })
         .then(results => {
-          console.log("List name updated");
+          console.log(results);
           res.status(200).json(results);
         });
     })

@@ -10,6 +10,7 @@ class Header extends Component {
   };
 
   render() {
+    const { user } = this.props;
     return (
       <>
         <div className={styles.header}>
@@ -21,8 +22,8 @@ class Header extends Component {
             >
               <FontAwesomeIcon icon="plus"></FontAwesomeIcon>
             </button>
-            {this.props.boards
-              ? this.props.boards.map((title, index) => {
+            {user
+              ? user.board.map((title, index) => {
                   return (
                     <BoardList
                       key={index}
@@ -33,7 +34,7 @@ class Header extends Component {
                     />
                   );
                 })
-              : "No boards"}
+              : ""}
           </div>
         </div>
       </>
@@ -42,7 +43,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = state => {
-  return { boards: state.user.board };
+  return { user: state.user };
 };
 
 const mapDispachToProps = dispatch => {
