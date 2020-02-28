@@ -3,7 +3,7 @@ import ListItem from "../ListItem";
 import AddButton from "../AddButton";
 import styles from "./Board.module.scss";
 import { connect } from "react-redux";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { loadUserBoards, updateBoardTitle, reorderTasks } from "../../actions";
 
 class Board extends Component {
@@ -124,35 +124,49 @@ class Board extends Component {
           )}
         </div>
         <DragDropContext onDragEnd={this.onDragEnd}>
-          <div className={styles.listArea}>
-            {user
-              ? user.board[currentBoard].list.map((column, index) => {
-                  return (
-                    <ListItem
-                      key={index}
-                      userId={this.state.userId}
-                      boardId={this.state.boardId}
-                      lists={column}
-                      listPosition={column.position}
-                      listName={column.title}
-                      tasks={column.task}
-                    />
-                  );
-                })
-              : ""}
-            <AddButton
-              list
-              userId={this.state.userId}
-              boardId={this.state.boardId}
-              listPosition={
-                user
-                  ? user.board[currentBoard].list[
-                      user.board[currentBoard].list.length - 1
-                    ].position
-                  : Number(0)
-              }
-            ></AddButton>
-          </div>
+          <Droppable
+            droppableId={"all-lists"}
+            direction="horizontal"
+            type="list "
+          >
+            {(provided, snapshot) => (
+              <div
+                className={styles.listArea}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {user
+                  ? user.board[currentBoard].list.map((column, index) => {
+                      return (
+                        <ListItem
+                          key={column.id}
+                          index={index}
+                          userId={this.state.userId}
+                          boardId={this.state.boardId}
+                          lists={column}
+                          listPosition={column.position}
+                          listName={column.title}
+                          tasks={column.task}
+                        />
+                      );
+                    })
+                  : ""}
+                {provided.placeholder}
+                <AddButton
+                  list
+                  userId={this.state.userId}
+                  boardId={this.state.boardId}
+                  listPosition={
+                    user
+                      ? user.board[currentBoard].list[
+                          user.board[currentBoard].list.length - 1
+                        ].position
+                      : Number(0)
+                  }
+                ></AddButton>
+              </div>
+            )}
+          </Droppable>
         </DragDropContext>
       </div>
     );
