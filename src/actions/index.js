@@ -7,9 +7,9 @@ export const UPDATE_TASK_DESCRIPTION = "UPDATE_TASK_DESCRIPTION";
 export const ADD_NEW_BOARD = "ADD_NEW_BOARD";
 export const ADD_TASK = "ADD_TASK";
 export const ADD_LIST = "ADD_LIST";
+export const REORDER_TASKS = "REORDER_TASKS";
 
 export const loadUserBoards = () => async dispatch => {
-  console.log("loaded boards");
   await Axios.get("/api/users")
     .then(data => {
       dispatch({
@@ -92,6 +92,19 @@ export const addNewList = data => async dispatch => {
     .then(data => {
       dispatch({
         type: ADD_LIST,
+        payload: data.data[0]
+      });
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+};
+
+export const reorderTasks = data => async dispatch => {
+  await Axios.put("/api/tasks/reorder", data)
+    .then(data => {
+      dispatch({
+        type: REORDER_TASKS,
         payload: data.data[0]
       });
     })

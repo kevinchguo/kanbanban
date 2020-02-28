@@ -3,6 +3,7 @@ const listRouter = express.Router();
 const List = require("../../../database/models/List");
 
 listRouter.post("/", (req, res) => {
+  console.log("Posting new list");
   const { user_id, board_id, position, title } = req.body;
   let newList = {
     board_id: board_id,
@@ -12,8 +13,7 @@ listRouter.post("/", (req, res) => {
   return new List(newList)
     .save()
     .then(() => {
-      console.log(user_id);
-
+      console.log("List added to database");
       return req.db.User.where({ id: user_id })
         .fetchAll({
           withRelated: [
@@ -31,6 +31,7 @@ listRouter.post("/", (req, res) => {
           ]
         })
         .then(results => {
+          console.log("Returned list results");
           res.status(200).json(results);
         });
     })

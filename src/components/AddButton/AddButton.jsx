@@ -14,6 +14,59 @@ class AddButton extends Component {
     this.state = { formOpen: false, submitText: "" };
   }
 
+  openForm = () => {
+    this.setState({ formOpen: true });
+  };
+
+  handleTextareaChange = e => {
+    this.setState({ submitText: e.target.value });
+  };
+
+  submitNewListOrForm = () => {
+    this.setState({ formOpen: false });
+    const { submitText } = this.state;
+    const { list } = this.props;
+    if (submitText !== "") {
+      if (list) {
+        this.submitNewList();
+      } else {
+        this.submitNewCard();
+      }
+    }
+  };
+
+  submitNewList = () => {
+    this.setState({ formOpen: false });
+    const { listPosition, addNewList, boardId, userId } = this.props;
+    const { submitText } = this.state;
+    let newList = {
+      user_id: userId,
+      board_id: boardId,
+      title: submitText,
+      position: parseInt(Number(listPosition) + 1000)
+    };
+    if (submitText !== "") {
+      this.setState({ submitText: "" });
+      addNewList(newList);
+    }
+  };
+
+  submitNewCard = () => {
+    this.setState({ formOpen: false });
+    const { listId, userId, taskPosition, addNewTask } = this.props;
+    const { submitText } = this.state;
+    let newCard = {
+      user_id: userId,
+      list_id: listId,
+      description: submitText,
+      position: parseInt(Number(taskPosition) + 1000)
+    };
+    if (submitText !== "") {
+      this.setState({ submitText: "" });
+      addNewTask(newCard);
+    }
+  };
+
   renderAddButton = () => {
     const { list } = this.props;
 
@@ -44,59 +97,6 @@ class AddButton extends Component {
         <p>{buttonText}</p>
       </div>
     );
-  };
-
-  openForm = () => {
-    this.setState({ formOpen: true });
-  };
-
-  handleTextareaChange = e => {
-    this.setState({ submitText: e.target.value });
-  };
-
-  submitNewListOrForm = () => {
-    this.setState({ formOpen: false });
-    const { submitText } = this.state;
-    const { list } = this.props;
-    if (submitText !== "") {
-      if (list) {
-        this.submitNewList();
-      } else {
-        this.submitNewCard();
-      }
-    }
-  };
-
-  submitNewList = () => {
-    this.setState({ formOpen: false });
-    const { listPosition, addNewList, boardId, userId } = this.props;
-    const { submitText } = this.state;
-    let newList = {
-      user_id: userId,
-      board_id: boardId,
-      title: submitText,
-      position: parseInt(Number(listPosition) + 1).toFixed(2)
-    };
-    if (submitText !== "") {
-      this.setState({ submitText: "" });
-      addNewList(newList);
-    }
-  };
-
-  submitNewCard = () => {
-    this.setState({ formOpen: false });
-    const { listId, userId, taskPosition, addNewTask } = this.props;
-    const { submitText } = this.state;
-    let newCard = {
-      user_id: userId,
-      list_id: listId,
-      description: submitText,
-      position: parseInt(Number(taskPosition) + 1).toFixed(2)
-    };
-    if (submitText !== "") {
-      this.setState({ submitText: "" });
-      addNewTask(newCard);
-    }
   };
 
   renderForm = () => {

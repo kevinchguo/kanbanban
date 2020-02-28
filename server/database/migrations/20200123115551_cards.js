@@ -7,7 +7,7 @@ exports.up = function(knex) {
       .references("lists.id")
       .notNullable();
     table.string("description");
-    table.decimal("position").notNullable();
+    table.integer("position").notNullable();
     table.timestamps(true, true);
   });
 };

@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { Card } from "@material-ui/core";
 import ListItem from "../ListItem";
 import AddButton from "../AddButton";
 import styles from "./Board.module.scss";
 import { connect } from "react-redux";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { loadUserBoards, updateBoardTitle } from "../../actions";
-import ListPosition from "../ListPosition";
+import { DragDropContext } from "react-beautiful-dnd";
+import { loadUserBoards, updateBoardTitle, reorderTasks } from "../../actions";
 
 class Board extends Component {
   constructor(props) {
@@ -69,10 +67,43 @@ class Board extends Component {
     this.setState({ isClicked: true });
   };
 
+  onDragEnd = result => {
+    const { destination, source, draggableId } = result;
+    const { reorderTasks, currentBoard, user } = this.props;
+    if (!destination) {
+      return;
+    }
+    console.log(
+      "Destination: ",
+      destination,
+      "Source: ",
+      source,
+      "task_id: ",
+      draggableId
+    );
+    const reorderData = {
+      toListId: parseInt(destination.droppableId),
+      toTaskIndex: destination.index,
+      fromListId: parseInt(source.droppableId),
+      fromTaskId: source.index,
+      movedTaskId: parseInt(draggableId),
+      user_id: user.id,
+      currentBoard: currentBoard
+    };
+    if (
+      source.draggableId === destination.draggableId &&
+      source.index === destination.index
+    ) {
+      return;
+    } else {
+      reorderTasks(reorderData);
+    }
+  };
+
   render() {
     const { user, currentBoard } = this.props;
     return (
-      <div style={{ backgroundColor: "cornflowerblue", height: "100%" }}>
+      <div>
         <div className={styles.boardTitle}>
           {this.state.isClicked ? (
             <input
@@ -92,36 +123,37 @@ class Board extends Component {
             </div>
           )}
         </div>
-
-        <div className={styles.listArea}>
-          {user
-            ? user.board[currentBoard].list.map((column, index) => {
-                return (
-                  <ListItem
-                    key={index}
-                    userId={this.state.userId}
-                    boardId={this.state.boardId}
-                    lists={column}
-                    listPosition={column.position}
-                    listName={column.title}
-                    tasks={column.task}
-                  />
-                );
-              })
-            : ""}
-          <AddButton
-            list
-            userId={this.state.userId}
-            boardId={this.state.boardId}
-            listPosition={
-              user
-                ? user.board[currentBoard].list[
-                    user.board[currentBoard].list.length - 1
-                  ].position
-                : Number(0.0).toFixed(2)
-            }
-          ></AddButton>
-        </div>
+        <DragDropContext onDragEnd={this.onDragEnd}>
+          <div className={styles.listArea}>
+            {user
+              ? user.board[currentBoard].list.map((column, index) => {
+                  return (
+                    <ListItem
+                      key={index}
+                      userId={this.state.userId}
+                      boardId={this.state.boardId}
+                      lists={column}
+                      listPosition={column.position}
+                      listName={column.title}
+                      tasks={column.task}
+                    />
+                  );
+                })
+              : ""}
+            <AddButton
+              list
+              userId={this.state.userId}
+              boardId={this.state.boardId}
+              listPosition={
+                user
+                  ? user.board[currentBoard].list[
+                      user.board[currentBoard].list.length - 1
+                    ].position
+                  : Number(0)
+              }
+            ></AddButton>
+          </div>
+        </DragDropContext>
       </div>
     );
   }
@@ -140,6 +172,9 @@ const mapDispatchToProps = dispatch => {
     },
     updateBoardTitle: data => {
       return dispatch(updateBoardTitle(data));
+    },
+    reorderTasks: data => {
+      return dispatch(reorderTasks(data));
     }
   };
 };

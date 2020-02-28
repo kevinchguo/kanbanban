@@ -5,7 +5,8 @@ import {
   UPDATE_TASK_DESCRIPTION,
   ADD_NEW_BOARD,
   ADD_TASK,
-  ADD_LIST
+  ADD_LIST,
+  REORDER_TASKS
 } from "../actions";
 
 const initialState = {};
@@ -32,6 +33,8 @@ const reducer = (state = initialState, action) => {
     case UPDATE_TASK_DESCRIPTION:
       return Object.assign({}, state, { user: action.payload });
     case ADD_NEW_BOARD:
+      return Object.assign({}, state, { user: action.payload });
+    case REORDER_TASKS:
       return Object.assign({}, state, { user: action.payload });
     default:
       return state;
