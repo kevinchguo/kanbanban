@@ -23,6 +23,7 @@ require("./configPassport/passport")(passport);
 const app = express();
 
 //Middleware
+app.use(express.json());
 app.use(express.static("./server/public"));
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: false }));

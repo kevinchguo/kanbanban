@@ -32,6 +32,7 @@ listRouter.post("/", (req, res) => {
         })
         .then(results => {
           console.log("Returned list results");
+          console.log(results);
           res.status(200).json(results);
         });
     })

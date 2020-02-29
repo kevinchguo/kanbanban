@@ -20,11 +20,15 @@ class Task extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
-      this.setState({
-        taskDescription: this.props.task.description,
-        listId: this.props.listId,
-        taskId: this.props.task.id
-      });
+      const { task, listId, userId } = this.props;
+      if (task) {
+        this.setState({
+          userId: userId,
+          taskDescription: task.description,
+          listId: listId,
+          taskId: task.id
+        });
+      }
     }
   }
 

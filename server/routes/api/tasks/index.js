@@ -38,7 +38,8 @@ taskRouter.post("/", (req, res) => {
         })
         .then(results => {
           console.log("Return from adding tasks");
-          console.log("hello")
+          console.log("hello");
+          console.log(results);
           res.status(200).json(results);
         });
     })
@@ -92,9 +93,9 @@ taskRouter.put("/reorder", (req, res) => {
     currentBoard
   } = req.body;
 
-
   // only change position number of task
-  return req.db.Task.where({ list_id: toListId }).orderBy("position", "asc")
+  return req.db.Task.where({ list_id: toListId })
+    .orderBy("position", "asc")
     .fetchAll()
     .then(results => {
       if (!results.models[toTaskIndex]) {
@@ -103,11 +104,13 @@ taskRouter.put("/reorder", (req, res) => {
         return new Task({ id: movedTaskId }).fetch().then(results => {
           if (fromListId === toListId) {
             // Same list
-            console.log(position)
+            console.log(position);
             results.set({ position: position + 1000 }).save();
           } else {
             // Different  list
-            results.set({ position: position + 1000, list_id: toListId }).save();
+            results
+              .set({ position: position + 1000, list_id: toListId })
+              .save();
           }
           return req.db.User.where({ id: user_id })
             .fetchAll({
@@ -127,10 +130,11 @@ taskRouter.put("/reorder", (req, res) => {
             })
             .then(results => {
               res.status(200).json(results);
-            }).catch(() => {
+            })
+            .catch(() => {
               res.status(400);
             });
-        })
+        });
       } else {
         const { id, position } = results.models[toTaskIndex].attributes;
         return new Task({ id: movedTaskId }).fetch().then(results => {
@@ -159,12 +163,13 @@ taskRouter.put("/reorder", (req, res) => {
             })
             .then(results => {
               res.status(200).json(results);
-            }).catch(() => {
+            })
+            .catch(() => {
               res.status(400);
             });
-        })
+        });
       }
     });
-})
+});
 
 module.exports = taskRouter;

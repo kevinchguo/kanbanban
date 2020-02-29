@@ -101,11 +101,18 @@ class Board extends Component {
   };
 
   render() {
+    const {
+      isClicked,
+
+      boardTitle,
+      boardId,
+      userId
+    } = this.state;
     const { user, currentBoard } = this.props;
     return (
       <div>
         <div className={styles.boardTitle}>
-          {this.state.isClicked ? (
+          {isClicked ? (
             <input
               autoFocus
               className={styles.boardTitle}
@@ -113,7 +120,7 @@ class Board extends Component {
               spellCheck={false}
               maxLength={512}
               name="boardTitle"
-              value={this.state.boardTitle}
+              value={boardTitle}
               onBlur={this.handleBoardTitleSubmit}
               onChange={this.handleBoardTitle}
             />
@@ -154,8 +161,8 @@ class Board extends Component {
                 {provided.placeholder}
                 <AddButton
                   list
-                  userId={this.state.userId}
-                  boardId={this.state.boardId}
+                  userId={userId}
+                  boardId={boardId}
                   listPosition={
                     user
                       ? user.board[currentBoard].list[
@@ -173,11 +180,10 @@ class Board extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  username: state.username,
-  userId: state.userId,
-  user: state.user
-});
+const mapStateToProps = state => {
+  const { username, userId, user } = state;
+  return { username: username, userId: userId, user: user };
+};
 
 const mapDispatchToProps = dispatch => {
   return {

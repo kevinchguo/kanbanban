@@ -77,6 +77,7 @@ export const addNewBoard = data => async dispatch => {
 export const addNewTask = data => async dispatch => {
   await Axios.post("/api/tasks", data)
     .then(data => {
+      console.log("Data from adding task: ", data);
       dispatch({
         type: ADD_TASK,
         payload: data.data[0]
@@ -90,6 +91,7 @@ export const addNewTask = data => async dispatch => {
 export const addNewList = data => async dispatch => {
   await Axios.post("/api/lists", data)
     .then(data => {
+      console.log("Data from adding list: ", data);
       dispatch({
         type: ADD_LIST,
         payload: data.data[0]

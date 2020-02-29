@@ -17,12 +17,14 @@ class ListItem extends Component {
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
       const { userId, lists, boardId } = this.props;
-      this.setState({
-        userId: userId,
-        listName: lists.title,
-        boardId: boardId,
-        listId: lists.id
-      });
+      if (lists) {
+        this.setState({
+          userId: userId,
+          listName: lists.title,
+          boardId: boardId,
+          listId: lists.id
+        });
+      }
     }
   }
 
@@ -53,8 +55,8 @@ class ListItem extends Component {
     this.setState({ isClicked: true });
   };
   render() {
-    const { listName, userId, listId, tasks, lists } = this.state;
-    const { divIsClicked, isClicked, index } = this.props;
+    const { listName, userId, listId } = this.state;
+    const { divIsClicked, isClicked, index, lists, tasks } = this.props;
     return (
       <Draggable draggableId={String(lists.id)} index={index}>
         {provided => (
