@@ -55,6 +55,7 @@ class AddButton extends Component {
     this.setState({ formOpen: false });
     const { listId, userId, taskPosition, addNewTask } = this.props;
     const { submitText } = this.state;
+    console.log("New card listId: ", listId);
     let newCard = {
       user_id: userId,
       list_id: listId,

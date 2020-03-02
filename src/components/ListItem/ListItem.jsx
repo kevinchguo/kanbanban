@@ -34,18 +34,22 @@ class ListItem extends Component {
 
   handleListNameSubmit = e => {
     e.preventDefault();
+    const { listName, listId, boardId, userId, username } = this.state;
+    const { lists, updateListName } = this.props;
     this.setState({ isClicked: false });
     let newListName = {
-      listName: this.state.listName,
-      listId: this.state.listId,
-      boardId: this.state.boardId,
-      userId: this.state.userId,
-      username: this.state.username
+      listName: listName,
+      listId: listId,
+      boardId: boardId,
+      userId: userId,
+      username: username
     };
-    if (this.state.listName === this.props.lists.title) {
+    if (listName === lists.title) {
       return console.log("Same listName, didn't submit");
+    } else if (listName === "") {
+      this.setState({ listName: lists.title });
     } else {
-      this.props.updateListName(newListName);
+      updateListName(newListName);
       console.log("Submitted updated listName");
     }
   };
@@ -55,77 +59,72 @@ class ListItem extends Component {
     this.setState({ isClicked: true });
   };
   render() {
-    const { listName, userId, listId } = this.state;
-    const { divIsClicked, isClicked, index, lists, tasks } = this.props;
+    const { listName, userId, isClicked } = this.state;
+    const { index, lists, tasks } = this.props;
     return (
-      <Draggable draggableId={String(lists.id)} index={index}>
-        {provided => (
+      // <Draggable draggableId={String(lists.id)} index={index}>
+      //   {provided => (
+      //     <div
+      //       ref={provided.innerRef}
+      //       {...provided.draggableProps}
+      //       {...provided.dragHandleProps}
+      //     >
+      <Droppable droppableId={String(lists.id)} type="card">
+        {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
+            {...provided.droppableProps}
+            className={styles.listItem}
           >
-            <Droppable droppableId={String(lists.id)}>
-              {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className={styles.listItem}
-                >
-                  {isClicked ? (
-                    <Textarea
-                      autoFocus
-                      spellCheck={false}
-                      maxLength={512}
-                      name="listName"
-                      value={listName}
-                      onBlur={this.handleListNameSubmit}
-                      onChange={this.handleListName}
-                    ></Textarea>
-                  ) : (
-                    <div
-                      className={styles.listName}
-                      onClick={this.listIsClicked}
-                    >
-                      {listName ? listName : "Name this list"}
-                    </div>
-                  )}
-                  <div className={styles.taskArea}>
-                    {lists
-                      ? lists.task.map((task, index) => {
-                          return (
-                            <Task
-                              key={task.id}
-                              taskPosition={task.position}
-                              index={index}
-                              task={task}
-                              userId={parseInt(userId)}
-                              listId={parseInt(listId)}
-                              tasks={tasks}
-                              divIsClicked={divIsClicked}
-                              isClicked={isClicked}
-                            />
-                          );
-                        })
-                      : ""}
-                  </div>
-                  {provided.placeholder}
-                  <AddButton
-                    userId={parseInt(userId)}
-                    listId={parseInt(listId)}
-                    taskPosition={
-                      tasks[tasks.length === 0 ? 0 : tasks.length - 1] ===
-                      undefined
-                        ? Number(0)
-                        : tasks[tasks.length - 1].position
-                    }
-                  ></AddButton>
-                </div>
-              )}
-            </Droppable>
+            {isClicked ? (
+              <Textarea
+                autoFocus
+                spellCheck={false}
+                maxLength={512}
+                name="listName"
+                value={listName}
+                onBlur={this.handleListNameSubmit}
+                onChange={this.handleListName}
+              ></Textarea>
+            ) : (
+              <div className={styles.listName} onClick={this.listIsClicked}>
+                {listName ? listName : "Name this list"}
+              </div>
+            )}
+            <div className={styles.taskArea}>
+              {lists
+                ? lists.task.map((task, index) => {
+                    return (
+                      <Task
+                        key={task.id}
+                        taskPosition={task.position}
+                        index={index}
+                        task={task}
+                        userId={parseInt(userId)}
+                        listId={parseInt(lists.id)}
+                        tasks={tasks}
+                        isClicked={isClicked}
+                      />
+                    );
+                  })
+                : ""}
+            </div>
+            {provided.placeholder}
+            <AddButton
+              userId={parseInt(userId)}
+              listId={parseInt(lists.id)}
+              taskPosition={
+                tasks[tasks.length === 0 ? 0 : tasks.length - 1] === undefined
+                  ? Number(0)
+                  : tasks[tasks.length - 1].position
+              }
+            ></AddButton>
           </div>
         )}
-      </Draggable>
+      </Droppable>
+      // </div>
+      // )}
+      // </Draggable>
     );
   }
 }

@@ -87,7 +87,7 @@ taskRouter.put("/reorder", (req, res) => {
     toListId,
     toTaskIndex,
     fromListId,
-    fromTaskId,
+    fromTaskIndex,
     movedTaskId,
     user_id,
     currentBoard
@@ -97,20 +97,31 @@ taskRouter.put("/reorder", (req, res) => {
   return req.db.Task.where({ list_id: toListId })
     .orderBy("position", "asc")
     .fetchAll()
-    .then(results => {
-      if (!results.models[toTaskIndex]) {
+    .then(listResults => {
+      listResults.models.map(task => {
+        console.log(task.attributes);
+      });
+      if (!listResults.models[toTaskIndex]) {
         // Last item in list
-        const { id, position } = results.models[toTaskIndex - 1].attributes;
         return new Task({ id: movedTaskId }).fetch().then(results => {
           if (fromListId === toListId) {
             // Same list
-            console.log(position);
+            const { id, position } = listResults.models[
+              toTaskIndex - 1
+            ].attributes;
             results.set({ position: position + 1000 }).save();
           } else {
             // Different  list
-            results
-              .set({ position: position + 1000, list_id: toListId })
-              .save();
+            if (listResults.models.length !== 0) {
+              const { id, position } = listResults.models[
+                toTaskIndex - 1
+              ].attributes;
+              results
+                .set({ position: position + 1000, list_id: toListId })
+                .save();
+            } else {
+              results.set({ position: 1000, list_id: toListId }).save();
+            }
           }
           return req.db.User.where({ id: user_id })
             .fetchAll({
@@ -136,14 +147,22 @@ taskRouter.put("/reorder", (req, res) => {
             });
         });
       } else {
-        const { id, position } = results.models[toTaskIndex].attributes;
+        const { id, position } = listResults.models[toTaskIndex].attributes;
         return new Task({ id: movedTaskId }).fetch().then(results => {
           if (fromListId === toListId) {
             // Same list
-            results.set({ position: position - 1 }).save();
+            if (toTaskIndex > fromTaskIndex) {
+              results.set({ position: position + 1 }).save();
+            } else {
+              results.set({ position: position - 1 }).save();
+            }
           } else {
             //Different list
-            results.set({ position: position - 1, list_id: toListId }).save();
+            if (fromTaskIndex <= toTaskIndex) {
+              results.set({ position: position - 1, list_id: toListId }).save();
+            } else {
+              results.set({ position: position + 1, list_id: toListId }).save();
+            }
           }
           return req.db.User.where({ id: user_id })
             .fetchAll({

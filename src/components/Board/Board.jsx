@@ -48,14 +48,17 @@ class Board extends Component {
     e.preventDefault();
     this.setState({ isClicked: false });
     const { boardTitle, boardId, userId, username } = this.state;
+    const { user, currentBoard } = this.props;
     let newBoardTitle = {
       title: boardTitle,
       boardId: boardId,
       userId: userId,
       username: username
     };
-    if (boardTitle === this.props.boards[this.props.currentBoard].title) {
+    if (boardTitle === user.board[currentBoard].title) {
       return console.log("Same title, didn't submit");
+    } else if (boardTitle === "") {
+      this.setState({ boardTitle: user.board[currentBoard].title });
     } else {
       this.props.updateBoardTitle(newBoardTitle);
       console.log("Submitted boardTitle");
@@ -85,13 +88,13 @@ class Board extends Component {
       toListId: parseInt(destination.droppableId),
       toTaskIndex: destination.index,
       fromListId: parseInt(source.droppableId),
-      fromTaskId: source.index,
+      fromTaskIndex: source.index,
       movedTaskId: parseInt(draggableId),
       user_id: user.id,
       currentBoard: currentBoard
     };
     if (
-      source.draggableId === destination.draggableId &&
+      source.droppableId === destination.droppableId &&
       source.index === destination.index
     ) {
       return;
@@ -101,13 +104,7 @@ class Board extends Component {
   };
 
   render() {
-    const {
-      isClicked,
-
-      boardTitle,
-      boardId,
-      userId
-    } = this.state;
+    const { isClicked, boardTitle, boardId, userId } = this.state;
     const { user, currentBoard } = this.props;
     return (
       <div>
@@ -131,49 +128,51 @@ class Board extends Component {
           )}
         </div>
         <DragDropContext onDragEnd={this.onDragEnd}>
-          <Droppable
+          {/* <Droppable
             droppableId={"all-lists"}
             direction="horizontal"
             type="list "
           >
-            {(provided, snapshot) => (
-              <div
-                className={styles.listArea}
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {user
-                  ? user.board[currentBoard].list.map((column, index) => {
-                      return (
-                        <ListItem
-                          key={column.id}
-                          index={index}
-                          userId={this.state.userId}
-                          boardId={this.state.boardId}
-                          lists={column}
-                          listPosition={column.position}
-                          listName={column.title}
-                          tasks={column.task}
-                        />
-                      );
-                    })
-                  : ""}
-                {provided.placeholder}
-                <AddButton
-                  list
-                  userId={userId}
-                  boardId={boardId}
-                  listPosition={
-                    user
-                      ? user.board[currentBoard].list[
-                          user.board[currentBoard].list.length - 1
-                        ].position
-                      : Number(0)
-                  }
-                ></AddButton>
-              </div>
-            )}
-          </Droppable>
+            {(provided, snapshot) => ( */}
+          <div
+            className={styles.listArea}
+            // {...provided.droppableProps}
+            // ref={provided.innerRef}
+          >
+            {user
+              ? user.board[currentBoard].list.map((column, index) => {
+                  return (
+                    <ListItem
+                      key={column.id}
+                      index={index}
+                      userId={this.state.userId}
+                      boardId={this.state.boardId}
+                      lists={column}
+                      listPosition={column.position}
+                      listName={column.title}
+                      tasks={column.task}
+                    />
+                  );
+                })
+              : ""}
+            {/* {provided.placeholder} */}
+            <AddButton
+              list
+              userId={userId}
+              boardId={boardId}
+              listPosition={
+                user
+                  ? user.board[currentBoard].list.length === 0
+                    ? Number(1000)
+                    : user.board[currentBoard].list[
+                        user.board[currentBoard].list.length - 1
+                      ].position
+                  : ""
+              }
+            ></AddButton>
+          </div>
+          {/* )}
+          </Droppable> */}
         </DragDropContext>
       </div>
     );

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import DeleteButton from "../DeleteButton";
 import { connect } from "react-redux";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -38,18 +39,22 @@ class Task extends Component {
 
   handleDescriptionSubmit = e => {
     e.preventDefault();
+    const { taskDescription, taskId, listId, username } = this.state;
+    const { task, updateTaskDescription, userId } = this.props;
     this.setState({ isClicked: false });
     let newTaskDescription = {
-      taskDescription: this.state.taskDescription,
-      taskId: this.state.taskId,
-      listId: this.state.listId,
-      userId: this.props.userId,
-      username: this.state.username
+      taskDescription: taskDescription,
+      taskId: taskId,
+      listId: listId,
+      userId: userId,
+      username: username
     };
-    if (this.state.taskDescription === this.props.task.description) {
+    if (taskDescription === task.description) {
       return console.log("Same taskDescription, didn't submit");
+    } else if (taskDescription === "") {
+      this.setState({ taskDescription: task.description });
     } else {
-      this.props.updateTaskDescription(newTaskDescription);
+      updateTaskDescription(newTaskDescription);
       console.log("Submitted taskDescription");
     }
   };
@@ -94,6 +99,7 @@ class Task extends Component {
                 {taskDescription}
               </div>
             )}
+            <DeleteButton></DeleteButton>
             <div>{`I'm position ${index}`}</div>
             <div>{`created ${timeAgo.format(new Date(task.created_at))}`}</div>
           </div>
