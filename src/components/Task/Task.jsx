@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import DeleteButton from "../DeleteButton";
+import Textarea from "react-textarea-autosize";
 import { connect } from "react-redux";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
@@ -79,27 +80,29 @@ class Task extends Component {
             {...provided.dragHandleProps}
             className={styles.task}
           >
-            {isClicked ? (
-              <input
-                autoFocus
-                className={styles.taskDescription}
-                type="text"
-                spellCheck={false}
-                maxLength={512}
-                name="taskDescription"
-                value={taskDescription}
-                onBlur={this.handleDescriptionSubmit}
-                onChange={this.handleDescription}
-              />
-            ) : (
-              <div
-                className={styles.taskDescription}
-                onClick={this.taskIsClicked}
-              >
-                {taskDescription}
-              </div>
-            )}
-            <DeleteButton></DeleteButton>
+            <div className={styles.grid}>
+              {isClicked ? (
+                <Textarea
+                  autoFocus
+                  className={styles.taskDescription}
+                  type="text"
+                  spellCheck={false}
+                  maxLength={512}
+                  name="taskDescription"
+                  value={taskDescription}
+                  onBlur={this.handleDescriptionSubmit}
+                  onChange={this.handleDescription}
+                />
+              ) : (
+                <div
+                  className={styles.taskDescription}
+                  onClick={this.taskIsClicked}
+                >
+                  {taskDescription}
+                </div>
+              )}
+              <DeleteButton />
+            </div>
             <div>{`I'm position ${index}`}</div>
             <div>{`created ${timeAgo.format(new Date(task.created_at))}`}</div>
           </div>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AddButton from "../AddButton";
+import DeleteButton from "../DeleteButton";
 import Textarea from "react-textarea-autosize";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { connect } from "react-redux";
@@ -76,21 +77,24 @@ class ListItem extends Component {
             {...provided.droppableProps}
             className={styles.listItem}
           >
-            {isClicked ? (
-              <Textarea
-                autoFocus
-                spellCheck={false}
-                maxLength={512}
-                name="listName"
-                value={listName}
-                onBlur={this.handleListNameSubmit}
-                onChange={this.handleListName}
-              ></Textarea>
-            ) : (
-              <div className={styles.listName} onClick={this.listIsClicked}>
-                {listName ? listName : "Name this list"}
-              </div>
-            )}
+            <div className={styles.grid}>
+              {isClicked ? (
+                <Textarea
+                  autoFocus
+                  spellCheck={false}
+                  maxLength={512}
+                  name="listName"
+                  value={listName}
+                  onBlur={this.handleListNameSubmit}
+                  onChange={this.handleListName}
+                ></Textarea>
+              ) : (
+                <div className={styles.listName} onClick={this.listIsClicked}>
+                  {listName ? listName : "Name this list"}
+                </div>
+              )}
+              <DeleteButton list />
+            </div>
             <div className={styles.taskArea}>
               {lists
                 ? lists.task.map((task, index) => {

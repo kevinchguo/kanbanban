@@ -15,3 +15,8 @@
   height: auto;
   overflow-wrap: break-word;
 }
+
+.grid {
+  display: grid;
+  grid-template-columns: auto 24px;
+}

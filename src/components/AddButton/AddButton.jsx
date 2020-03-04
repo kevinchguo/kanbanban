@@ -140,7 +140,12 @@ class AddButton extends Component {
           >
             {buttonText}
           </Button>
-          <CloseIcon style={{ marginLeft: "8", cursor: "pointer" }}></CloseIcon>
+          <div styles={styles.closeButton}>
+            <CloseIcon
+              fontSize="small"
+              style={{ marginLeft: "8", cursor: "pointer" }}
+            ></CloseIcon>
+          </div>
         </div>
       </div>
     );

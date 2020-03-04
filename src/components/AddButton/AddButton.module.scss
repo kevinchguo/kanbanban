@@ -22,3 +22,10 @@
   margin-top: 8px;
   align-items: center;
 }
+
+.closeButton {
+  color: red;
+  &:hover {
+    color: red;
+  }
+}

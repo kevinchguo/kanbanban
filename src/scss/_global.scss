@@ -17,12 +17,13 @@ textarea {
   background: 0;
   border-radius: $border-radius;
   resize: none;
-  width: 100%;
+  width: auto;
   overflow: hidden;
 
   &:focus {
-    width: 100%;
+    width: auto;
     overflow: hidden;
+    background-color: white;
     outline: none;
     resize: none;
   }
