@@ -1,5 +1,36 @@
 @import "../../scss/variables";
 
 .header {
-  background-color: red;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  height: 8vh;
+  background: $blue;
+  color: $dark-accent;
+  box-shadow: $header-shadow;
+  z-index: 999;
+  animation: slideInDown 0.5s forwards;
+  color: $off-white;
+}
+
+.boardList {
+  display: flex;
+}
+.addBoards {
+  background-color: $grey-accent;
+  justify-content: center;
+  color: black;
+  font-size: 12pt;
+  text-align: center;
+  padding: 2px;
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  border-radius: $circle-border-radius;
+  &:hover {
+    background-color: $highlight-accent;
+    cursor: pointer;
+  }
 }

@@ -1,0 +1,21 @@
+@import "../../scss/variables.scss";
+
+.board {
+}
+
+.boardTitle {
+  font-size: 24pt;
+  font-weight: 500;
+}
+
+.titleInput {
+}
+
+.listArea {
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  padding-top: $margin;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}

@@ -1,0 +1,39 @@
+@import "../../scss/variables.scss";
+
+.listItem {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  max-height: 672px;
+  width: 290px;
+  padding: 10px;
+  margin-left: $margin;
+  margin-left: $margin;
+  margin-bottom: $margin;
+  border-radius: $border-radius;
+  background-color: $grey-accent;
+}
+
+.taskArea {
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  white-space: normal;
+}
+
+.listName {
+  font-weight: bold;
+}
+
+.deleteButton {
+  width: fit-content;
+  height: fit-content;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: auto 24px;
+}
