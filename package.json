@@ -28,7 +28,7 @@
     "http-proxy-middleware": "^1.0.0",
     "immutability-helper": "^3.0.1",
     "javascript-time-ago": "^2.0.6",
-    "knex": "^0.20.7",
+    "knex": "^2.4.0",
     "lodash.flow": "^3.5.0",
     "method-override": "^3.0.0",
     "moment": "^2.24.0",
